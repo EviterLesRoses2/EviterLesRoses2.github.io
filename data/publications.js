@@ -1,31 +1,42 @@
 ﻿export const publicationData = [
   {
-    title: "Efficient and Scalable Monocular Human-Object Interaction Motion Reconstruction",
-    authors: "Boran Wen†, Ye Lu†, Keyan Wan, <strong>Sirui Wang</strong>, Jiahong Zhou, Junxuan Liang, Xinpeng Liu, Bang Xiao, Dingbang Huang, Ruiyang Liu, Yong-Lu Li*",
-    venue: "Under Review",
-    year: "2025",
-    image: "img/publications/Open4DHOI.jpg",
-    links: { 
-      arxiv: "https://arxiv.org/abs/2512.00960",
-      code: "https://github.com/wenboran2002/open4dhoi_code"
+    title: "Sensorless Control of Doubly Fed Induction Generators with Grid Fault Ride-Through Capability",
+    authors: "<strong>Wenbo Zeng</strong>, Yuhao Wang, Han Wu, Xiang Meng, Tao Wang<sup>*</sup>, Chen Zhao, Zhenxiao Zhang and Lijian Wu",
+    venue: "IEEE Transactions on Power Electronics",
+    year: "2026",
+    image: "img/publications/dfig_frt.png",
+    links: {
+      status: "Under Review"
     }
   },
   {
-    title: "CaTFormer: Causal Temporal Transformer with Dynamic Contextual Fusion for Driving Intention Prediction",
-    authors: "<strong>Sirui Wang</strong>†, Zhou Guan†, Bingxi Zhao, Tongjia Gu, Jie Liu*",
-    venue: "AAAI 2026, Poster",
-    year: "2025",
-    image: "img/publications/CaTFormer.jpg",
-    links: { 
-      arxiv: "https://arxiv.org/abs/2507.13425",
-      code: "https://github.com/srwang0506/CaTFormer"
+    title: "Uncertainty Allocation-based Tube Model Predictive Control for Building Energy Management",
+    authors: "Qi Li, <strong>Wenbo Zeng</strong>, Xueyuan Cui and Yi Wang<sup>*</sup>",
+    venue: "IEEE Transactions on Smart Grid",
+    year: "2026",
+    image: "img/publications/tube_mpc.png",
+    links: {
+      status: "Under Review"
     }
   },
   {
-    title: "Lightweight Speech Enhancement with State-Space Model and Depthwise Separable Convolution",
-    authors: "Chen Jiang†, Dai Gao†, <strong>Sirui Wang</strong>, Chengxuan Zou, Jie Liu*",
-    venue: "Under Review, Major Revision Requested",
+    title: "Fast Frequency Support of Offshore Wind Farms Connected to Diode Rectifier Unit-based HVDC via AC/DC Coupled Inertia",
+    authors: "Han Wu, Tao Wang<sup>*</sup>, Yuhao Wang, Xiang Meng, <strong>Wenbo Zeng</strong> and Lijian Wu",
+    venue: "IEEE Transactions on Energy Conversion",
     year: "2025",
-    image: "img/publications/3.jpg"
-  }
+    image: "img/publications/offshore_wind.png",
+    links: {
+      status: "Under Review"
+    }
+  },
+  {
+    title: "Federated Heterogeneous-agent Reinforcement Learning for the Dispatch of Energy Hubs",
+    authors: "Haoyuan Deng, Lingyu Chen, <strong>Wenbo Zeng</strong>, Xueyuan Cui and Yi Wang<sup>*</sup>",
+    venue: "IEEE Transactions on Smart Grid",
+    year: "2025",
+    image: "img/publications/federated_learning.jpg",
+    links: {
+      status: "Under Review"
+    }
+  },
 ];

@@ -564,20 +564,84 @@ body { font-family: var(--font-body); font-size: 1rem; color: var(--text-main); 
   letter-spacing: 0.02em;
 }
 
-/* Responsive */
+/* ===== 教育/经历条目的布局优化 (CV LOGO) ===== */
+.cv-content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* 垂直居中 */
+    flex: 1;
+}
 
+.cv-main {
+    flex: 1; /* 占据剩余空间 */
+}
 
+.cv-logo {
+    margin-left: 20px;
+}
 
+/* 链接容器设置 */
+.cv-logo a {
+    display: block;
+    text-decoration: none;
+}
 
+/* 校徽图片的样式 */
+.cv-logo img {
+    /* 1. 调节高度：100px 是你设置的大小 */
+    height: 100px; 
+    
+    /* 2. 确保等比例：宽度设为 auto */
+    width: auto; 
+    
+    /* 3. 最大宽度限制 */
+    max-width: 160px; 
 
+    /* 4. 防变形核心：使用 contain 保证校徽完整不被切割 */
+    object-fit: contain; 
 
+    /* 5. 交互反馈：增加小手形状 */
+    cursor: pointer;
 
+    /* 6. 修饰属性 */
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.1)); 
+    transition: all 0.3s ease; /* 增加所有属性的过渡 */
+}
 
+/* 鼠标指上去的放大和点击感 */
+.cv-logo img:hover {
+    transform: scale(1.2); /* 稍微缩小了放大倍率，1.5 可能会挡住文字 */
+    filter: drop-shadow(0 8px 15px rgba(0,0,0,0.2)); /* 悬停时阴影加深 */
+}
 
+/* 适配手机屏幕：如果太挤了，就把校徽放下面 */
+@media (max-width: 600px) {
+    .cv-content-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .cv-logo {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+    .cv-logo img {
+        height: 80px; /* 移动端调小一点 */
+    }
+}
 
+/* 标题链接基础样式 */
+.pub-title-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-block;
+}
 
+/* 悬停变色效果 */
+.pub-title-link:hover .pub-title {
+  color: #3b82f6; /* 您可以根据喜好修改颜色 */
+  transition: color 0.2s ease;
+}
 
-
-
-
-
+.pub-title {
+  cursor: pointer;
+}

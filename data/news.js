@@ -1,26 +1,40 @@
 ﻿export const newsData = [
   {
     date: "2025.12",
-    title: "Open4DHOI Preprint and Code Released",
-    body: "🎉 Our new work on 4D Human-Object Interaction, <a href=\"https://wenboran2002.github.io/open4dhoi/\" target=\"_blank\">Open4DHOI</a>, is now online! We released the <a href=\"https://arxiv.org/abs/2512.00960\" target=\"_blank\">preprint</a> and <a href=\"https://github.com/wenboran2002/open4dhoi_code\" target=\"_blank\">open-sourced the code</a> — excited to contribute to the community!",
-    tag: "Release"
+    title: "Patent Commercialization Success",
+    body: "💰 Successfully completed the technology transfer of an invention patent with a total of 150,000 RMB.",
+    tag: "Industry"
   },
   {
     date: "2025.11",
-    title: "Paper Accepted to AAAI 2026",
-    body: "🎉 Our paper <em>CaTFormer</em> was accepted to AAAI 2026!",
-    tag: "Publication"
+    title: "National Scholarship Awarded",
+    body: "🎉 Honored to receive the National Scholarship for outstanding academic performance and all-round excellence!",
+    tag: "Honor"
   },
   {
-    date: "2025.07",
-    title: "Research Intern at RHOS Lab",
-    body: "🔬 Joined <a href=\"https://mvig-rhos.com/\" target=\"_blank\">RHOS Lab</a>, SAI, SJTU as a research intern — excited to dive into cutting-edge AI research! 🤖",
-    tag: "Experience"
+    date: "2025.10.25",
+    // 标题设置为红色加粗
+    title: "<b style='color: #ef4444;'>PhD Offer from The University of Hong Kong (HKU)!!!</b>",
+    body: "🎓 Thrilled to receive a PhD admission offer from HKU! The offer arrived at 11:13 AM, shortly after a productive interview (10:00-11:00 AM) with Prof. Yi Wang at the Electrical Digital Lab (EDL).",
+    tag: "Academic",
+    highlight: true // 增加一个标识位，方便您在代码中处理样式
+  },
+  {
+    date: "2025.10",
+    title: "Invention Patent Authorized",
+    body: "📜 Our research 'Sensorless Control Method and System for Doubly-Fed Induction Wind Turbine' (ZL 2025 1 0535050.8) has been officially granted as an invention patent.",
+    tag: "Research"
+  },
+  {
+    date: "2025.06",
+    title: "'Future Academic Star’ Project Funded",
+    body: "💰 Selected for the 'Future Academic Star' program and received a 20,000 RMB research grant for academic potential.",
+    tag: "Honor"
   },
   {
     date: "2025.05",
-    title: "Beijing College Student Innovation Project Awarded",
-    body: "🚀 Our team was awarded a Beijing College Student Innovation Project for 2025!",
+    title: "National Innovation Project Funded",
+    body: "💰 Awarded 24,000 RMB in key funding for a National-level Innovation and Entrepreneurship Training Program.",
     tag: "Project"
   },
   {
@@ -28,5 +42,5 @@
     title: "National Scholarship Awarded",
     body: "🎉 Honored to receive the National Scholarship for outstanding academic performance and all-round excellence!",
     tag: "Honor"
-  }
+  },
 ];
