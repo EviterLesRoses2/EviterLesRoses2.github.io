@@ -17,7 +17,7 @@
     {
       label: "Blog",
       text: "www.z-cosy.top",
-      url: "https://www.z-cosy.top/",
+      url: "https://notion-next-nine-wheat-35.vercel.app/",
       icon: "fa-solid fa-house", // 这是一个专门代表博客的图标
     },
   ],
