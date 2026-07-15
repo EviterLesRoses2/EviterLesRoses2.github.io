@@ -1,0 +1,61 @@
+[site]
+title = "曾文博"
+description = "曾文博的学术主页，研究方向包括风力发电、电机与电力电子控制、智能电网边缘智能。"
+last_updated = "2026年7月15日"
+
+[author]
+name = "曾文博"
+title = "本科生"
+institution = "浙江大学"
+
+[social]
+location = "中国杭州"
+location_details = ["浙江大学", "中国浙江杭州"]
+
+[[navigation]]
+title = "关于我"
+type = "page"
+target = "about"
+href = "/"
+
+[[navigation]]
+title = "论文"
+type = "page"
+target = "publications"
+href = "/publications"
+
+[[navigation]]
+title = "科研经历"
+type = "page"
+target = "experience"
+href = "/experience"
+
+[[navigation]]
+title = "教育经历"
+type = "page"
+target = "education"
+href = "/education"
+
+[[navigation]]
+title = "荣誉奖项"
+type = "page"
+target = "awards"
+href = "/awards"
+
+[[navigation]]
+title = "专利"
+type = "page"
+target = "patents"
+href = "/patents"
+
+[[navigation]]
+title = "简历"
+type = "page"
+target = "cv"
+href = "/cv"
+
+[[navigation]]
+title = "博客"
+type = "link"
+target = "blog"
+href = "https://notion-next-nine-wheat-35.vercel.app/"

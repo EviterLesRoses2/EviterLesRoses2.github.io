@@ -1,0 +1,4 @@
+type = "publication"
+title = "Publications"
+description = "Journal manuscripts and articles, ordered by author position and then journal impact factor. † indicates the corresponding author."
+source = "publications.bib"

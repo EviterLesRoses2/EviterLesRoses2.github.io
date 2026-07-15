@@ -1,0 +1,10 @@
+type = "card"
+title = "专利"
+description = "已授权发明专利与成果转化。"
+
+[[items]]
+title = "无位置传感器双馈风力发电机控制方法及系统"
+subtitle = "专利号 ZL 202510535050.8 · 已授权"
+date = "2025"
+content = "王涛、**曾文博**、吴立建。[专利记录](https://d.wanfangdata.com.cn/patent/Ch1QYXRlbnROZXdTb2xyOVMyMDI2MDEyNzE1NTEzORIpWkxfQ04yMDI1MTA1MzUwNTAuOF9DTjEyMDE1MDU2M0JfMjAyNTEwMTAaCDY3YzdoYTFn)"
+tags = ["已授权", "成果转化"]

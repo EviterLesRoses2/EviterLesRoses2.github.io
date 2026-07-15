@@ -1,0 +1,29 @@
+type = "about"
+title = "关于我"
+
+[profile]
+research_interests = [
+  "风力发电",
+  "电机与传动控制",
+  "智能电网边缘智能",
+  "数据分析"
+]
+
+[[sections]]
+id = "about"
+type = "markdown"
+source = "bio.md"
+title = "关于我"
+
+[[sections]]
+id = "featured_publications"
+type = "publications"
+title = "精选论文"
+filter = "selected"
+limit = 5
+
+[[sections]]
+id = "news"
+type = "list"
+title = "动态"
+source = "news.toml"

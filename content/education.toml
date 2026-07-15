@@ -1,0 +1,20 @@
+type = "card"
+title = "Education"
+description = "Academic training in electrical engineering."
+
+[[items]]
+title = "The University of Hong Kong"
+subtitle = "PhD in Electrical Engineering (expected)"
+date = "Sep 2027 –"
+content = "Incoming doctoral student."
+
+[[items]]
+title = "Zhejiang University"
+subtitle = "B.S. in Electrical Engineering"
+date = "Sep 2023 – Jun 2027"
+content = "Undergraduate study in the College of Electrical Engineering."
+
+[[items]]
+title = "No. 1 Middle School Affiliated to Central China Normal University"
+subtitle = "Wuhan, Hubei"
+date = "Sep 2020 – Jun 2023"

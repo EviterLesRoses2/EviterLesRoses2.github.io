@@ -1,0 +1,4 @@
+type = "publication"
+title = "论文"
+description = "按作者排序位次升序、同位次按期刊影响因子降序排列；† 表示通讯作者。"
+source = "publications.bib"

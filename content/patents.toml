@@ -1,0 +1,10 @@
+type = "card"
+title = "Patents"
+description = "Authorized inventions and technology transfer."
+
+[[items]]
+title = "Sensorless Control Method and System for Doubly-Fed Induction Wind Generator"
+subtitle = "Patent ZL 202510535050.8 · Authorized"
+date = "2025"
+content = "Tao Wang, **Wenbo Zeng**, and Lijian Wu. [Patent record](https://d.wanfangdata.com.cn/patent/Ch1QYXRlbnROZXdTb2xyOVMyMDI2MDEyNzE1NTEzORIpWkxfQ04yMDI1MTA1MzUwNTAuOF9DTjEyMDE1MDU2M0JfMjAyNTEwMTAaCDY3YzdoYTFn)"
+tags = ["Authorized", "Technology Transfer"]

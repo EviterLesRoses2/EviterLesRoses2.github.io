@@ -1,0 +1,20 @@
+type = "card"
+title = "教育经历"
+description = "电气工程专业学习经历。"
+
+[[items]]
+title = "香港大学"
+subtitle = "电气工程博士（预计）"
+date = "2027.09 –"
+content = "拟入学博士生。"
+
+[[items]]
+title = "浙江大学"
+subtitle = "电气工程及其自动化学士"
+date = "2023.09 – 2027.06"
+content = "就读于电气工程学院。"
+
+[[items]]
+title = "华中师范大学第一附属中学"
+subtitle = "湖北武汉"
+date = "2020.09 – 2023.06"

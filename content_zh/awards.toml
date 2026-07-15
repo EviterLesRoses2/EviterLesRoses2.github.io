@@ -1,0 +1,47 @@
+type = "card"
+title = "荣誉奖项"
+description = "部分奖学金、荣誉称号与竞赛获奖。"
+
+[[items]]
+title = "国家奖学金"
+subtitle = "中华人民共和国教育部"
+date = "2025、2024"
+content = "连续两年获评，奖励综合表现优异的本科生（约前 3.5%）。"
+
+[[items]]
+title = "松下育英一等奖学金"
+subtitle = "松下 / 浙江大学"
+date = "2025"
+content = "电气工程学院 200 余名优秀学生中共 4 人获评。"
+
+[[items]]
+title = "浙江大学一等奖学金"
+subtitle = "浙江大学"
+date = "2025、2024"
+content = "奖励学业表现优秀的学生（前 7%）。"
+
+[[items]]
+title = "浙江大学优秀学生"
+subtitle = "浙江大学"
+date = "2025、2024"
+
+[[items]]
+title = "蓝田学园十佳学生"
+subtitle = "浙江大学"
+date = "2024"
+content = "从 1700 余名学生中评选（前 0.6%）。"
+
+[[items]]
+title = "全国大学生英语竞赛三等奖"
+subtitle = "全国竞赛"
+date = "2025、2024"
+
+[[items]]
+title = "浙江省大学生高等数学竞赛一等奖"
+subtitle = "浙江省"
+date = "2024"
+
+[[items]]
+title = "浙江省大学生物理创新竞赛二等奖"
+subtitle = "浙江省"
+date = "2024"

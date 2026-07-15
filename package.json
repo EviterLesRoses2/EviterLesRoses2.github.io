@@ -1,16 +1,43 @@
 {
-  "name": "srwang0506-homepage",
+  "name": "wenbo-zeng-academic-homepage",
+  "version": "1.3.3",
   "private": true,
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "deploy": "gh-pages -d dist"
+    "dev": "next dev --turbopack",
+    "build": "next build && node scripts/sync-static-export.mjs",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@headlessui/react": "^2.2.4",
+    "@heroicons/react": "^2.2.0",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.18.1",
+    "lucide-react": "^0.515.0",
+    "next": "^15.5.20",
+    "next-themes": "^0.4.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0",
+    "smol-toml": "^1.7.0",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
-    "gh-pages": "^6.3.0",
-    "vite": "^6.0.0"
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "^15.5.20",
+    "lightningcss": "^1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  },
+  "optionalDependencies": {
+    "lightningcss-linux-x64-gnu": "^1"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   }
 }
-

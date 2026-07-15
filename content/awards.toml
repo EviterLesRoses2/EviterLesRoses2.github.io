@@ -1,0 +1,48 @@
+type = "card"
+title = "Honors & Awards"
+description = "Selected scholarships, distinctions, and competition awards."
+
+[[items]]
+title = "National Scholarship of China"
+subtitle = "Ministry of Education of China"
+date = "2025 & 2024"
+content = "Awarded twice for all-round excellence; approximately the top 3.5% of undergraduates."
+
+[[items]]
+title = "Panasonic 'Ikuei' Excellence Scholarship — First Class"
+subtitle = "Panasonic / Zhejiang University"
+date = "2025"
+content = "One of four recipients selected from more than 200 students in the College of Electrical Engineering."
+
+[[items]]
+title = "First Prize Scholarship of Zhejiang University"
+subtitle = "Zhejiang University"
+date = "2025 & 2024"
+content = "Awarded for outstanding academic performance (top 7%)."
+
+[[items]]
+title = "Excellent Student of Zhejiang University"
+subtitle = "Zhejiang University"
+date = "2025 & 2024"
+content = "University honor for comprehensive excellence in academics, research, and service."
+
+[[items]]
+title = "Top 10 Outstanding Students of Lantian College"
+subtitle = "Zhejiang University"
+date = "2024"
+content = "Selected from more than 1,700 students (top 0.6%)."
+
+[[items]]
+title = "National English Competition for College Students — Third Prize"
+subtitle = "National competition"
+date = "2025 & 2024"
+
+[[items]]
+title = "Zhejiang Provincial Mathematics Competition — First Prize"
+subtitle = "Zhejiang Province"
+date = "2024"
+
+[[items]]
+title = "Zhejiang Provincial Physics Innovation Contest — Second Prize"
+subtitle = "Zhejiang Province"
+date = "2024"

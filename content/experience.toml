@@ -1,0 +1,17 @@
+type = "card"
+title = "Research Experience"
+description = "Research appointments and industry-facing collaborations."
+
+[[items]]
+title = "Tsinghua Sichuan Energy Internet Research Institute"
+subtitle = "Intern"
+date = "Nov 2025 – Present"
+content = "Research internship at the Tsinghua Sichuan Energy Internet Research Institute."
+tags = ["Energy Internet", "Research"]
+
+[[items]]
+title = "Zhejiang University–Shanghai Electric Wind Power R&D Center"
+subtitle = "Undergraduate Research Assistant"
+date = "Oct 2024 – Present"
+content = "Research on wind power generation, doubly fed induction generators, fault ride-through control, and electric drives."
+tags = ["Wind Power", "DFIG", "Control"]
