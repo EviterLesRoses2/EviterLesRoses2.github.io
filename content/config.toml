@@ -1,7 +1,7 @@
 [site]
 title = "Wenbo Zeng"
 description = "Academic homepage of Wenbo Zeng, an electrical engineering student and researcher working on wind power, electric drives, and edge intelligence for smart grids."
-favicon = "/favicon.svg"
+favicon = "/favicon.png"
 last_updated = "July 15, 2026"
 
 [author]
@@ -77,12 +77,6 @@ title = "Patents"
 type = "page"
 target = "patents"
 href = "/patents"
-
-[[navigation]]
-title = "CV"
-type = "page"
-target = "cv"
-href = "/cv"
 
 [[navigation]]
 title = "Blog"

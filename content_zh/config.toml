@@ -49,12 +49,6 @@ target = "patents"
 href = "/patents"
 
 [[navigation]]
-title = "简历"
-type = "page"
-target = "cv"
-href = "/cv"
-
-[[navigation]]
 title = "博客"
 type = "link"
 target = "blog"
