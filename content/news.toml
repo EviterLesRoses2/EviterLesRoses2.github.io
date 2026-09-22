@@ -1,4 +1,8 @@
 [[news]]
+date = "2026-09"
+content = "Our first-author paper, 'Sensorless Control of Doubly Fed Induction Generators with Grid Fault Ride-Through Capability,' has been accepted by IEEE Transactions on Energy Conversion. 🎉"
+
+[[news]]
 date = "2026-07"
 content = "Our paper on federated heterogeneous-agent reinforcement learning for energy-hub dispatch has been accepted by IEEE Transactions on Smart Grid. 🎉"
 
