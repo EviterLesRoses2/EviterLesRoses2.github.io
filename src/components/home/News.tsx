@@ -27,7 +27,7 @@ export default function News({ items, title }: NewsProps) {
             <div className="space-y-3">
                 {items.map((item, index) => (
                     <div key={index} className="flex items-start space-x-3">
-                        <span className="text-xs text-neutral-500 mt-1 w-16 flex-shrink-0">{item.date}</span>
+                        <span className="text-xs text-neutral-500 mt-1 w-20 flex-shrink-0 whitespace-nowrap">{item.date}</span>
                         <p className="text-sm text-neutral-700">{item.content}</p>
                     </div>
                 ))}
