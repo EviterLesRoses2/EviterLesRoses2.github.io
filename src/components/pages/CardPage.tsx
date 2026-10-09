@@ -54,7 +54,7 @@ export default function CardPage({ config, embedded = false }: { config: CardPag
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: 0.1 * index }}
-                        className={`bg-white dark:bg-neutral-900 ${embedded ? "p-4" : "p-6"} rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-800 hover:shadow-lg transition-all duration-200 hover:scale-[1.01]`}
+                        className={`relative bg-white dark:bg-neutral-900 ${embedded ? "p-4" : "p-6"} rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-800 hover:shadow-lg transition-all duration-200 hover:scale-[1.01]`}
                     >
                         <div className="flex justify-between items-start mb-2">
                             <h3 className={`${embedded ? "text-lg" : "text-xl"} font-semibold text-primary`}>{item.title}</h3>
@@ -82,6 +82,15 @@ export default function CardPage({ config, embedded = false }: { config: CardPag
                                     </span>
                                 ))}
                             </div>
+                        )}
+                        {item.link && (
+                            <a
+                                href={item.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={item.title}
+                                className="absolute inset-0 rounded-xl hover:bg-accent/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                            />
                         )}
                     </motion.div>
                 ))}

@@ -210,6 +210,15 @@ export default function PublicationsList({ config, publications, embedded = fals
                                                 className="object-cover"
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             />
+                                            {pub.url && (
+                                                <a
+                                                    href={pub.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    aria-label={`${pub.title} — IEEE Xplore`}
+                                                    className="absolute inset-0 rounded-lg hover:bg-black/5 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent"
+                                                />
+                                            )}
                                         </div>
                                     </div>
                                 )}
