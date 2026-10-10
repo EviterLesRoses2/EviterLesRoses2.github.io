@@ -11,18 +11,22 @@ content = """
 **Role:** Principal Student Investigator  
 **Project:** Sensorless Control and Fault Ride-Through of Doubly-Fed Induction Generators.
 
+**Status:** Passed mid-term review; evaluation: **Excellent**.
+
 Selected as one of 30 undergraduate recipients university-wide.
 """
 tags = ["University Grant", "Wind Power", "DFIG"]
 
 [[items]]
 title = "National Undergraduate Innovation and Entrepreneurship Training Program - Key Project"
-subtitle = "Ministry of Education of China (program authority) · Zhejiang University (administering institution)"
+subtitle = "Ministry of Education of China"
 date = "2025"
 content = """
 **Funding:** RMB 24,000  
 **Role:** Principal Student Investigator  
 **Project:** Sensorless Control and Fault Ride-Through of Doubly-Fed Induction Generators.
+
+**Status:** Completed; final evaluation: **Excellent**.
 
 Selected as one of five undergraduate recipients university-wide.
 
