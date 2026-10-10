@@ -2,7 +2,7 @@
 title = "Wenbo Zeng"
 description = "Academic homepage of Wenbo Zeng, an electrical engineering student and researcher working on wind power, electric drives, and edge intelligence for smart grids."
 favicon = "/favicon.png"
-last_updated = "October 9, 2026"
+last_updated = "October 10, 2026"
 
 [author]
 name = "Wenbo Zeng"
@@ -59,6 +59,12 @@ title = "Experience"
 type = "page"
 target = "experience"
 href = "/experience"
+
+[[navigation]]
+title = "Funding"
+type = "page"
+target = "funding"
+href = "/funding"
 
 [[navigation]]
 title = "Education"

@@ -1,0 +1,31 @@
+type = "card"
+title = "Research Funding"
+description = "Two undergraduate research grants totaling RMB 44,000, both as Principal Student Investigator."
+
+[[items]]
+title = "Future Academic Star for Undergraduates"
+subtitle = "Zhejiang University"
+date = "2025"
+content = """
+**Funding:** RMB 20,000  
+**Role:** Principal Student Investigator  
+**Project:** Sensorless Control and Fault Ride-Through of Doubly-Fed Induction Generators.
+
+Selected as one of 30 undergraduate recipients university-wide.
+"""
+tags = ["University Grant", "Wind Power", "DFIG"]
+
+[[items]]
+title = "National Undergraduate Innovation and Entrepreneurship Training Program - Key Project"
+subtitle = "Ministry of Education of China (program authority) · Zhejiang University (administering institution)"
+date = "2025"
+content = """
+**Funding:** RMB 24,000  
+**Role:** Principal Student Investigator  
+**Project:** Sensorless Control and Fault Ride-Through of Doubly-Fed Induction Generators.
+
+Selected as one of five undergraduate recipients university-wide.
+
+[Program information (Ministry of Education)](https://www.moe.gov.cn/srcsite/A08/s5672/201907/t20190724_392132.html)
+"""
+tags = ["National Key Project", "Wind Power", "DFIG"]
