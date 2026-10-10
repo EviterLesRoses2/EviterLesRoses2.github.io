@@ -1,10 +1,22 @@
 type = "card"
 title = "专利"
-description = "已授权发明专利与成果转化。"
+description = "已授权发明专利与实质审查中的专利申请。"
 
 [[items]]
 title = "无位置传感器双馈风力发电机控制方法及系统"
 subtitle = "专利号 ZL 202510535050.8 · 已授权"
 date = "2025"
-content = "王涛、**曾文博**、吴立建。[专利记录](https://d.wanfangdata.com.cn/patent/Ch1QYXRlbnROZXdTb2xyOVMyMDI2MDEyNzE1NTEzORIpWkxfQ04yMDI1MTA1MzUwNTAuOF9DTjEyMDE1MDU2M0JfMjAyNTEwMTAaCDY3YzdoYTFn)"
+content = "王涛、**曾文博**、吴立建。"
 tags = ["已授权", "成果转化"]
+link = "https://d.wanfangdata.com.cn/patent/Ch1QYXRlbnROZXdTb2xyOVMyMDI2MDEyNzE1NTEzORIpWkxfQ04yMDI1MTA1MzUwNTAuOF9DTjEyMDE1MDU2M0JfMjAyNTEwMTAaCDY3YzdoYTFn"
+
+[[items]]
+title = "具备大信号稳定性的双馈风力发电机转子位置观测方法"
+subtitle = "申请号 202610808675.1 · 实质审查中"
+date = "2026"
+content = """
+王涛、**曾文博**、吴立建、赵琛、张震霄。
+
+申请人：浙江大学。
+"""
+tags = ["实质审查中"]

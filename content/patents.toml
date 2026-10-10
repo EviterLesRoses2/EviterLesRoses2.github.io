@@ -1,10 +1,22 @@
 type = "card"
 title = "Patents"
-description = "Authorized inventions and technology transfer."
+description = "Granted patents and applications under substantive examination."
 
 [[items]]
 title = "Sensorless Control Method and System for Doubly-Fed Induction Wind Generator"
 subtitle = "Patent ZL 202510535050.8 · Authorized"
 date = "2025"
-content = "Tao Wang, **Wenbo Zeng**, and Lijian Wu. [Patent record](https://d.wanfangdata.com.cn/patent/Ch1QYXRlbnROZXdTb2xyOVMyMDI2MDEyNzE1NTEzORIpWkxfQ04yMDI1MTA1MzUwNTAuOF9DTjEyMDE1MDU2M0JfMjAyNTEwMTAaCDY3YzdoYTFn)"
+content = "Tao Wang, **Wenbo Zeng**, and Lijian Wu."
 tags = ["Authorized", "Technology Transfer"]
+link = "https://d.wanfangdata.com.cn/patent/Ch1QYXRlbnROZXdTb2xyOVMyMDI2MDEyNzE1NTEzORIpWkxfQ04yMDI1MTA1MzUwNTAuOF9DTjEyMDE1MDU2M0JfMjAyNTEwMTAaCDY3YzdoYTFn"
+
+[[items]]
+title = "Rotor Position Estimation Method for Doubly Fed Induction Generators with Large-Signal Stability"
+subtitle = "Application No. 202610808675.1 · Under Substantive Examination"
+date = "2026"
+content = """
+Tao Wang, **Wenbo Zeng**, Lijian Wu, Chen Zhao, and Zhenxiao Zhang.
+
+Applicant: Zhejiang University.
+"""
+tags = ["Under Substantive Examination"]
