@@ -24,6 +24,7 @@ export interface SiteConfig {
     google_scholar?: string;
     orcid?: string;
     github?: string;
+    cv?: string;
     linkedin?: string;
     [key: string]: string | string[] | undefined;
   };

@@ -18,6 +18,7 @@ location = "Hangzhou, China"
 location_url = "https://maps.google.com/?q=Zhejiang+University+Hangzhou"
 location_details = ["Zhejiang University", "Hangzhou, Zhejiang, China"]
 github = "https://github.com/EviterLesRoses2"
+cv = "/cv/WenboZeng_CV.pdf"
 
 [features]
 # Show a like button on the about page

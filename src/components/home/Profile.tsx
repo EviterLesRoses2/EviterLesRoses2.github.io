@@ -15,6 +15,24 @@ import { Github, Linkedin, Pin } from 'lucide-react';
 import type { SiteConfig } from '@/lib/config';
 import { useMessages } from '@/lib/i18n/useMessages';
 
+const CvIcon = ({ className }: { className?: string }) => (
+    <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className={className}
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <path d="M14 2v6h6" />
+        <text x="12" y="17" textAnchor="middle" fill="currentColor" stroke="none" fontSize="8" fontWeight="600" fontFamily="Arial, sans-serif">CV</text>
+    </svg>
+);
+
 // Custom ORCID icon component
 const OrcidIcon = ({ className }: { className?: string }) => (
     <svg
@@ -96,6 +114,11 @@ export default function Profile({ author, social, features, researchInterests }:
             name: 'GitHub',
             href: social.github,
             icon: Github,
+        }] : []),
+        ...(social.cv ? [{
+            name: 'CV',
+            href: social.cv,
+            icon: CvIcon,
         }] : []),
         ...(social.linkedin ? [{
             name: 'LinkedIn',
@@ -296,6 +319,7 @@ export default function Profile({ author, social, features, researchInterests }:
                             rel="noopener noreferrer"
                             className="p-2 sm:p-2 text-neutral-600 dark:text-neutral-400 hover:text-accent transition-colors duration-200"
                             aria-label={link.name}
+                            title={link.name}
                         >
                             <IconComponent className="h-5 w-5" />
                         </a>
