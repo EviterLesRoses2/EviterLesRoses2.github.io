@@ -75,12 +75,12 @@ export default function SelectedPublications({ publications, title, enableOnePag
                                 {pub.description}
                             </p>
                         )}
-                        {pub.url && (
+                        {(pub.demo || pub.url) && (
                             <a
-                                href={pub.url}
+                                href={pub.demo || pub.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                aria-label={`${pub.title} — IEEE Xplore`}
+                                aria-label={`${pub.title} — ${pub.demo ? 'Interactive demo' : 'Publication'}`}
                                 className="absolute inset-0 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                             />
                         )}

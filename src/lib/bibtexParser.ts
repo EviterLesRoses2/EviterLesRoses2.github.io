@@ -92,6 +92,7 @@ export function parseBibTeX(bibtexContent: string, locale?: string): Publication
       pages: tags.pages,
       doi: tags.doi,
       url: tags.url,
+      demo: tags.demo,
       code: tags.code,
       abstract: cleanBibTeXString(tags.abstract),
       description: cleanBibTeXString(tags.description || tags.note),
@@ -102,7 +103,7 @@ export function parseBibTeX(bibtexContent: string, locale?: string): Publication
 
       // Store original BibTeX (excluding custom fields)
       bibtex: reconstructBibTeX(entry, [
-        'selected', 'preview', 'description', 'keywords', 'code',
+        'selected', 'preview', 'description', 'keywords', 'code', 'demo',
         'status', 'statuslabel', 'authorposition', 'authorrole', 'impactfactor', 'quartile'
       ]),
     };

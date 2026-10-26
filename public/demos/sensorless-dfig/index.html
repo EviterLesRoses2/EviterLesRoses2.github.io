@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sensorless DFIG Ride-Through</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="description" content="Interactive companion to the IEEE TEC paper: Sensorless Control of Doubly-Fed Induction Generators with Grid Fault Ride-Through Capability.">
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="css/style.css">
+<script>
+  // restore language / theme before first paint
+  (function () {
+    var r = document.documentElement;
+    try {
+      var l = localStorage.getItem('frt-lang'); if (l === 'zh' || l === 'en') { r.dataset.lang = l; r.lang = l === 'zh' ? 'zh-CN' : 'en'; }
+      var t = localStorage.getItem('frt-theme'); if (t === 'dark' || t === 'light') r.dataset.theme = t;
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">Sensorless <span>FRT</span></div>
+    <nav class="nav" id="nav">
+      <a href="#problem"><span class="en">Problem</span><span class="zh">问题</span></a>
+      <a href="#error-function"><span class="en">① Error function</span><span class="zh">① 误差函数</span></a>
+      <a href="#flux-observer"><span class="en">② Flux observer</span><span class="zh">② 磁链观测器</span></a>
+      <a href="#saturation"><span class="en">③ Saturation LUT</span><span class="zh">③ 饱和查表</span></a>
+      <a href="#experiments"><span class="en">Experiments</span><span class="zh">实验</span></a>
+      <a href="#comparison"><span class="en">Comparison</span><span class="zh">对比</span></a>
+      <a href="#paper"><span class="en">Paper</span><span class="zh">论文</span></a>
+    </nav>
+    <div class="tools">
+      <button class="btn-ghost" id="langBtn" aria-label="Switch language"><span class="en">中文</span><span class="zh">EN</span></button>
+      <button class="btn-ghost" id="themeBtn" aria-label="Toggle dark mode">◐</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============================== HERO ============================== -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="venue"><b>IEEE TEC</b> · Transactions on Energy Conversion · 2026</div>
+      <h1>
+        <span class="en">Sensorless Control of Doubly-Fed Induction Generators with Grid Fault Ride-Through Capability</span>
+        <span class="zh">具备电网故障穿越能力的双馈感应发电机无位置传感器控制</span>
+      </h1>
+      <div class="authors">Wenbo Zeng, Tao Wang, Yuhao Wang, Han Wu, Xiang Meng, Chen Zhao, Zhenxiao Zhang, Lijian Wu</div>
+      <p class="lede">
+        <span class="en">Removing the rotor encoder makes wind turbines cheaper and more reliable — but until now, no sensorless DFIG could survive the deep voltage dips that grid codes demand. We show the <strong>first experimentally verified sensorless DFIG that rides through an 80% voltage dip</strong>, with the rotor-angle estimate staying within a few degrees.</span>
+        <span class="zh">去掉转子编码器可以让风电机组更便宜、更可靠——但此前还没有任何无位置传感器的双馈风机，能在电网规范要求的深度电压跌落下稳定运行。本文给出了<strong>首个经物理实验验证、可穿越 80% 电压跌落的无传感器 DFIG 控制方案</strong>，全过程转子位置估计误差仅为几度。</span>
+      </p>
+      <div class="cta">
+        <a class="btn primary" href="https://doi.org/10.1109/TEC.2026.3738362" target="_blank" rel="noopener">
+          <span class="en">Read the paper</span><span class="zh">阅读论文</span> ↗</a>
+        <a class="btn" href="#experiments"><span class="en">Replay the experiments</span><span class="zh">回放实验数据</span></a>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="v">80%</div><div class="k"><span class="en">symmetric voltage dip ridden through</span><span class="zh">对称电压跌落成功穿越</span></div></div>
+        <div class="stat"><div class="v" id="heroPeak">4°</div><div class="k"><span class="en">peak rotor-angle error during the fault</span><span class="zh">故障全程转子角度误差峰值</span></div></div>
+        <div class="stat"><div class="v">5 kW</div><div class="k"><span class="en">physical test rig, not simulation</span><span class="zh">物理实验平台，而非仿真</span></div></div>
+      </div>
+    </div>
+    <div class="hero-viz">
+      <div class="viz-heading"><span><span class="en">Inside the generator</span><span class="zh">发电机内部</span></span><span class="viz-badge"><span class="en">Measured · 80% dip</span><span class="zh">实测 · 80% 跌落</span></span></div>
+      <canvas id="heroDial" role="img" aria-label="DFIG cross-section: stator windings, wound rotor, air gap and bearing; measured rotor angle error"></canvas>
+      <div class="rotor-legend"><span><i class="true-angle"></i><span class="en">Encoder reference</span><span class="zh">编码器基准角</span></span><span><i class="estimated-angle"></i><span class="en">Sensorless estimate</span><span class="zh">无传感器估计角</span></span><button id="heroPlay" class="btn-ghost" aria-pressed="false"><span class="en">Pause</span><span class="zh">暂停</span></button></div>
+      <canvas id="heroSpark" class="spark"></canvas>
+      <p class="hero-caption">
+        <span class="en">Schematic cross-section, not to scale. Rotor motion is illustrative and slowed; the angular separation of the reference and estimate follows the measured error. Outer ring: grid voltage. Lower trace: measured angle error.</span>
+        <span class="zh">机械剖面为结构示意，非尺寸图。转动为慢速演示，两条角度线的夹角取自实测估计误差；外环显示电网电压，下图显示实测角度误差。</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 1. PROBLEM ============================== -->
+<section class="chapter" id="problem">
+  <div class="wrap">
+    <div class="eyebrow"><span class="en">01 · The problem</span><span class="zh">01 · 问题</span><span class="tag sim"><span class="en">illustrative model</span><span class="zh">示意模型</span></span></div>
+    <h2><span class="en">Why a grid fault breaks sensorless control</span><span class="zh">为什么电网故障会让无传感器控制失效</span></h2>
+    <div class="split">
+      <div>
+        <p>
+          <span class="en">A DFIG's stator is wired straight to the grid. When the voltage suddenly drops, the stator flux <span class="math" data-tex="\boldsymbol{\psi}_{s}">\boldsymbol{\psi}_{s}</span> cannot jump, so a <strong>natural, non-rotating DC flux</strong> appears and decays with the stator time constant <span class="math" data-tex="\tau_s=L_s/R_s">\tau_s=L_s/R_s</span> (eq. 7). An asymmetric fault adds a counter-rotating negative-sequence flux as well.</span>
+          <span class="zh">双馈电机的定子直接接入电网。电压骤降时，定子磁链 <span class="math" data-tex="\boldsymbol{\psi}_{s}">\boldsymbol{\psi}_{s}</span> 不能突变，于是激发出一个<strong>不旋转的暂态直流磁链</strong>，并按定子时间常数 <span class="math" data-tex="\tau_s=L_s/R_s">\tau_s=L_s/R_s</span> 衰减（式 7）。不对称故障还会额外产生反向旋转的负序磁链。</span>
+        </p>
+        <div class="eq"><span class="math" data-tex="\boldsymbol{\psi}_{s}(t)=\frac{\boldsymbol{V}_{s1}}{\mathrm{j}\omega_s}\mathrm{e}^{\mathrm{j}\omega_s t}-\frac{\boldsymbol{V}_{s2}}{\mathrm{j}\omega_s}\mathrm{e}^{-\mathrm{j}\omega_s t}+\boldsymbol{\Psi}_{sc}\mathrm{e}^{-t/\tau_s}">\boldsymbol{\psi}_{s}(t)=\frac{\boldsymbol{V}_{s1}}{\mathrm{j}\omega_s}\mathrm{e}^{\mathrm{j}\omega_s t}-\frac{\boldsymbol{V}_{s2}}{\mathrm{j}\omega_s}\mathrm{e}^{-\mathrm{j}\omega_s t}+\boldsymbol{\Psi}_{sc}\mathrm{e}^{-t/\tau_s}</span><span class="lbl">(7)</span></div>
+        <p>
+          <span class="en">Seen from the spinning rotor, these components sweep the rotor windings at high speed, inducing a large EMF and fast-changing currents — exactly the signals a sensorless observer relies on. <strong>Drag the dip depth</strong> and watch the flux leave its circle.</span>
+          <span class="zh">从旋转的转子看，这些分量以很高的相对速度切割转子绕组，感应出很大的反电势和剧烈变化的电流——而这些正是无传感器观测器赖以工作的信号。<strong>拖动跌落深度</strong>，看看磁链如何偏离原来的圆。</span>
+        </p>
+        <div class="controls">
+          <div class="ctrl"><label for="s1Dip"><span><span class="en">Voltage dip depth</span><span class="zh">电压跌落深度</span></span><output id="s1DipOut">80%</output></label><input type="range" id="s1Dip" min="0" max="90" step="5" value="80"></div>
+          <div class="seg" id="s1Type"><button data-v="sym" class="on"><span class="en">Symmetric</span><span class="zh">三相对称</span></button><button data-v="single"><span class="en">Single-phase</span><span class="zh">单相</span></button></div>
+          <button class="play" id="s1Play"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg><span class="en">Replay</span><span class="zh">重播</span></button>
+        </div>
+        <div class="readouts">
+          <div class="ro"><div class="k"><span class="en">Initial natural flux <span class="math" data-tex="|\boldsymbol{\Psi}_{sc}|">|\boldsymbol{\Psi}_{sc}|</span></span><span class="zh">初始暂态磁链 <span class="math" data-tex="|\boldsymbol{\Psi}_{sc}|">|\boldsymbol{\Psi}_{sc}|</span></span></div><div class="v" id="s1Nat">–</div></div>
+          <div class="ro" id="s1EmfBox"><div class="k"><span class="en">Peak rotor EMF / RSC limit</span><span class="zh">转子反电势峰值 / RSC 电压上限</span></div><div class="v" id="s1Ratio">–</div></div>
+        </div>
+      </div>
+      <div class="grid-2" style="gap:14px">
+        <div class="card">
+          <div class="panel-title"><span><span class="en">Stator flux in the αβ plane</span><span class="zh">αβ 平面内的定子磁链</span></span><span class="hint">p.u.</span></div>
+          <canvas id="s1Flux" class="plot square"></canvas>
+        </div>
+        <div class="card">
+          <div class="panel-title"><span><span class="en">Rotor-induced EMF</span><span class="zh">转子感应反电势</span></span><span class="hint">p.u.</span></div>
+          <canvas id="s1Emf" class="plot square"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="mt" style="margin-top:44px"><span class="en">Three obstacles — and the three answers in this paper</span><span class="zh">三大难题，以及本文给出的三个解法</span></h3>
+    <div class="cards">
+      <div class="cc"><div class="n">①</div>
+        <h3><span class="en">Observer stability</span><span class="zh">观测器稳定性</span></h3>
+        <p><span class="en">Large-signal transients make conventional observers diverge. → An RCMO with an <strong>arctangent-based linear error function</strong>, proven stable.</span><span class="zh">大信号暂态会让传统观测器发散。→ 采用<strong>反正切线性误差函数</strong>的 RCMO，并给出稳定性证明。</span></p>
+        <a class="more" href="#error-function"><span class="en">Try it →</span><span class="zh">动手试试 →</span></a></div>
+      <div class="cc"><div class="n">②</div>
+        <h3><span class="en">Flux-estimation conflict</span><span class="zh">磁链估计矛盾</span></h3>
+        <p><span class="en">Rejecting sensor DC offset also erases the real transient DC flux. → A <strong>mode-switching flux observer</strong>.</span><span class="zh">抑制传感器直流偏置时，会把真实的暂态直流磁链一起滤掉。→ <strong>模式切换磁链观测器</strong>。</span></p>
+        <a class="more" href="#flux-observer"><span class="en">Try it →</span><span class="zh">动手试试 →</span></a></div>
+      <div class="cc"><div class="n">③</div>
+        <h3><span class="en">Magnetic saturation</span><span class="zh">磁饱和</span></h3>
+        <p><span class="en">Fault overcurrents saturate the core and shift <span class="math" data-tex="L_{m}">L_{m}</span>. → A simple <strong>look-up-table</strong> correction, updated instantly.</span><span class="zh">故障过流使铁心饱和，<span class="math" data-tex="L_{m}">L_{m}</span> 偏离额定值。→ 简单的<strong>查表（LUT）</strong>参数修正，可瞬时更新。</span></p>
+        <a class="more" href="#saturation"><span class="en">Try it →</span><span class="zh">动手试试 →</span></a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 2. ERROR FUNCTION ============================== -->
+<section class="chapter" id="error-function">
+  <div class="wrap">
+    <div class="eyebrow"><span class="en">02 · Contribution ①</span><span class="zh">02 · 贡献 ①</span><span class="tag sim"><span class="en">illustrative model</span><span class="zh">示意模型</span></span></div>
+    <h2><span class="en">A linear error function that keeps the observer stable</span><span class="zh">让观测器保持稳定的线性误差函数</span></h2>
+    <div class="split">
+      <div>
+        <p>
+          <span class="en">The rotor-current MRAS observer (RCMO) compares the reference-model current <span class="math" data-tex="\boldsymbol{i}_r^s">\boldsymbol{i}_r^s</span>, calculated from stator quantities, with the adaptive-model current <span class="math" data-tex="\hat{\boldsymbol{i}}_r^s">\hat{\boldsymbol{i}}_r^s</span>, obtained by rotating the measured rotor current through the estimated angle. A PI loop drives their phase difference to zero. The question is how to measure that difference.</span>
+          <span class="zh">转子电流型 MRAS 观测器（RCMO）把由定子量计算的参考模型电流 <span class="math" data-tex="\boldsymbol{i}_r^s">\boldsymbol{i}_r^s</span>，与按估计角度变换后的自适应模型电流 <span class="math" data-tex="\hat{\boldsymbol{i}}_r^s">\hat{\boldsymbol{i}}_r^s</span> 进行比较，再由 PI 环把两者的相位差调到零。关键在于：这个相位差该怎么计算。</span>
+        </p>
+        <div class="eq"><span class="math" data-tex="\varepsilon_{\mathrm{cross}}=|\boldsymbol{i}_{r}^{s}|\,|\hat{\boldsymbol{i}}_{r}^{s}|\sin(\theta_r-\hat{\theta}_r)">\varepsilon_{\mathrm{cross}}=|\boldsymbol{i}_{r}^{s}|\,|\hat{\boldsymbol{i}}_{r}^{s}|\sin(\theta_r-\hat{\theta}_r)</span><span class="lbl">(10)</span></div>
+        <div class="eq"><span class="math" data-tex="\varepsilon_{\mathrm{atan}}=\operatorname{atan2}\!\left(\boldsymbol{i}_{r}^{s}\times\hat{\boldsymbol{i}}_{r}^{s},\,\boldsymbol{i}_{r}^{s}\cdot\hat{\boldsymbol{i}}_{r}^{s}\right)=\theta_r-\hat{\theta}_r">\varepsilon_{\mathrm{atan}}=\operatorname{atan2}\!\left(\boldsymbol{i}_{r}^{s}\times\hat{\boldsymbol{i}}_{r}^{s},\,\boldsymbol{i}_{r}^{s}\cdot\hat{\boldsymbol{i}}_{r}^{s}\right)=\theta_r-\hat{\theta}_r</span><span class="lbl">(11)</span></div><p class="note math-note"><span class="en">Here × denotes the scalar cross product in the αβ plane; atan2(y, x) returns the principal angle in (−π, π]. The unity-gain relation assumes nonzero current vectors and an unwrapped local angle error; fixed poles refer to the ideal observer loop.</span><span class="zh">其中 × 表示 αβ 平面内的标量叉积；atan2(y, x) 返回 (−π, π] 内的主值角。单位增益关系以电流向量非零、局部相角连续为前提；固定极点指理想观测器环路。</span></p>
+        <p>
+          <span class="en">The conventional cross product is only linear for small errors, and its gain scales with the current magnitudes, which swing wildly during a fault. The arctangent form returns the angle itself: the loop becomes <strong>linear, with fixed poles</strong> from <span class="math" data-tex="s^2+K_p s+K_i=0">s^2+K_p s+K_i=0</span> (eq. 19), whatever the currents do.</span>
+          <span class="zh">传统叉乘只在小误差时近似线性，而且增益随电流幅值变化——故障中电流幅值剧烈波动。反正切形式直接给出角度本身：整个环路变成<strong>线性系统、极点固定</strong>，由 <span class="math" data-tex="s^2+K_p s+K_i=0">s^2+K_p s+K_i=0</span>（式 19）决定，与电流如何变化无关。</span>
+        </p>
+        <div class="controls">
+          <div class="ctrl"><label for="s2E0"><span><span class="en">Initial angle error <span class="math" data-tex="\Delta\theta_0">\Delta\theta_0</span> (or drag the plot)</span><span class="zh">初始角度误差 <span class="math" data-tex="\Delta\theta_0">\Delta\theta_0</span>（也可拖动左图）</span></span><output id="s2E0Out">150°</output></label><input type="range" id="s2E0" min="-175" max="175" step="1" value="150"></div>
+          <div class="ctrl"><label for="s2Gain"><span><span class="en">Current magnitude <span class="math" data-tex="|\boldsymbol{i}_r^s|\,|\hat{\boldsymbol{i}}_r^s|">|\boldsymbol{i}_r^s|\,|\hat{\boldsymbol{i}}_r^s|</span> vs. design point</span><span class="zh">电流幅值 <span class="math" data-tex="|\boldsymbol{i}_r^s|\,|\hat{\boldsymbol{i}}_r^s|">|\boldsymbol{i}_r^s|\,|\hat{\boldsymbol{i}}_r^s|</span> 相对设计点</span></span><output id="s2GainOut">0.30×</output></label><input type="range" id="s2Gain" min="0.05" max="3" step="0.05" value="0.3"></div>
+          <div class="ctrl"><label for="s2Rip"><span><span class="en">50 Hz disturbance <span class="math" data-tex="\delta(t)">\delta(t)</span>, eq. (15)</span><span class="zh">50 Hz 扰动 <span class="math" data-tex="\delta(t)">\delta(t)</span>，式 (15)</span></span><output id="s2RipOut">3°</output></label><input type="range" id="s2Rip" min="0" max="15" step="1" value="3"></div>
+        </div>
+        <div class="readouts">
+          <div class="ro" id="s2GBox"><div class="k"><span class="en">Cross-product effective gain <span class="math" data-tex="\varepsilon/\Delta\theta">\varepsilon/\Delta\theta</span></span><span class="zh">叉乘法等效增益 <span class="math" data-tex="\varepsilon/\Delta\theta">\varepsilon/\Delta\theta</span></span></div><div class="v" id="s2G">–</div></div>
+          <div class="ro ok"><div class="k"><span class="en">Arctangent effective gain <span class="math" data-tex="\varepsilon/\Delta\theta">\varepsilon/\Delta\theta</span></span><span class="zh">反正切法等效增益 <span class="math" data-tex="\varepsilon/\Delta\theta">\varepsilon/\Delta\theta</span></span></div><div class="v">1.00</div></div>
+        </div>
+      </div>
+      <div style="display:grid;gap:14px">
+        <div class="grid-2" style="gap:14px">
+          <div class="card">
+            <div class="panel-title"><span><span class="en">Error signal ε vs. true error</span><span class="zh">误差信号 ε 与真实误差</span></span><span class="hint"><span class="en">drag</span><span class="zh">可拖动</span></span></div>
+            <div class="legend"><span><i style="border-color:var(--s2)"></i><span class="en">cross product</span><span class="zh">叉乘</span></span><span><i style="border-color:var(--s1)"></i>atan2</span></div>
+            <canvas id="s2Err" class="plot square"></canvas>
+          </div>
+          <div class="card">
+            <div class="panel-title"><span><span class="en">Equivalent closed-loop poles</span><span class="zh">等效闭环极点</span></span></div>
+            <div class="legend"><span><i style="border-color:var(--s2)"></i><span class="en">cross product</span><span class="zh">叉乘</span></span><span><i style="border-color:var(--s1)"></i>atan2</span></div>
+            <canvas id="s2Poles" class="plot square"></canvas>
+          </div>
+        </div>
+        <div class="card">
+          <div class="panel-title"><span><span class="en">Observer recovery: estimation error <span class="math" data-tex="\Delta\theta(t)">\Delta\theta(t)</span></span><span class="zh">观测器恢复过程：估计误差 <span class="math" data-tex="\Delta\theta(t)">\Delta\theta(t)</span></span></span><span class="hint">PI: <span class="math" data-tex="K_p,\ K_i">K_p,\ K_i</span> fixed</span></div>
+          <div class="legend"><span><i style="border-color:var(--s2)"></i><span class="en">cross product</span><span class="zh">叉乘</span></span><span><i style="border-color:var(--s1)"></i><span class="en">atan2 (proposed)</span><span class="zh">atan2（本文）</span></span></div>
+          <div class="plot-wrap"><canvas id="s2Resp" class="plot"></canvas></div>
+        </div>
+      </div>
+    </div>
+    <div class="callout">
+      <span class="en">Large errors and collapsing currents are exactly what a grid fault produces. With the cross product, both <strong>shrink the effective gain</strong> (beyond 90° the restoring signal even weakens as the error grows), so the poles crawl toward the origin and recovery stalls. Within a continuous phase branch, the ideal arctangent loop retains its fixed poles and is independent of current magnitude. The real-machine consequence is in <a href="#comparison">the comparison</a>: replacing only the error function with the cross product makes the observer diverge under an 80% dip.</span>
+      <span class="zh">大误差和电流幅值骤变，恰恰是电网故障带来的情形。用叉乘时，两者都会<strong>削弱等效增益</strong>（超过 90° 后，误差越大纠偏信号反而越弱），极点向原点爬行，恢复过程停滞；在相角连续的工作区间内，理想反正切环路的极点保持固定，且不随电流幅值变化。真机上的后果见<a href="#comparison">对比实验</a>：仅把误差函数换回叉乘，在 80% 跌落下观测器就会发散。</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 3. FLUX OBSERVER ============================== -->
+<section class="chapter" id="flux-observer">
+  <div class="wrap">
+    <div class="eyebrow"><span class="en">03 · Contribution ②</span><span class="zh">03 · 贡献 ②</span><span class="tag sim"><span class="en">illustrative model</span><span class="zh">示意模型</span></span></div>
+    <h2><span class="en">A flux observer that knows when to stop filtering</span><span class="zh">懂得何时停止滤波的磁链观测器</span></h2>
+    <div class="split">
+      <div>
+        <p>
+          <span class="en">The observer needs the stator flux <span class="math" data-tex="\boldsymbol{\psi}_s=\int(\boldsymbol{v}_s-R_s\boldsymbol{i}_s)\,\mathrm{d}t">\boldsymbol{\psi}_s=\int(\boldsymbol{v}_s-R_s\boldsymbol{i}_s)\,\mathrm{d}t</span>. Real sensors add a small DC offset, so a pure integrator drifts away. The usual fix is a DC-blocking (low-pass) integrator, but during a fault it also <strong>erases the genuine DC flux</strong> from eq. (7). That is a conflict no single filter can resolve.</span>
+          <span class="zh">观测器需要定子磁链 <span class="math" data-tex="\boldsymbol{\psi}_s=\int(\boldsymbol{v}_s-R_s\boldsymbol{i}_s)\,\mathrm{d}t">\boldsymbol{\psi}_s=\int(\boldsymbol{v}_s-R_s\boldsymbol{i}_s)\,\mathrm{d}t</span>。实际传感器存在微小的直流偏置，纯积分器会不断漂移。常规做法是使用隔直（低通型）积分器，但在故障期间，它会把式 (7) 中<strong>真实存在的直流磁链也一并滤除</strong>——这是任何单一滤波器都无法调和的矛盾。</span>
+        </p>
+        <p>
+          <span class="en"><strong>The proposed observer switches modes.</strong> In steady state it suppresses drift in closed loop and slowly learns the sensor offset <span class="math" data-tex="V_{\mathrm{off}}">V_{\mathrm{off}}</span>. When the stator voltage falls below a threshold, it switches to open-loop pure integration, compensated with the <em>frozen</em> pre-fault offset (eq. 12). It stays there until shortly after clearance.</span>
+          <span class="zh"><strong>本文的观测器会切换工作模式。</strong>稳态时，以闭环方式抑制漂移，并缓慢辨识传感器偏置 <span class="math" data-tex="V_{\mathrm{off}}">V_{\mathrm{off}}</span>；一旦定子电压低于阈值，就切换为开环纯积分，并用故障前<em>冻结</em>的偏置进行补偿（式 12），直到故障清除后一小段时间才切回。</span>
+        </p>
+        <div class="eq"><span class="math" data-tex="\boldsymbol{\psi}_{s}^{s}=\int\!\left(\boldsymbol{v}_{s}^{s}-R_s\boldsymbol{i}_{s}^{s}-\boldsymbol{V}_{\mathrm{off,prefault}}\right)\,\mathrm{d}t">\boldsymbol{\psi}_{s}^{s}=\int\!\left(\boldsymbol{v}_{s}^{s}-R_s\boldsymbol{i}_{s}^{s}-\boldsymbol{V}_{\mathrm{off,prefault}}\right)\,\mathrm{d}t</span><span class="lbl">(12)</span></div>
+        <div class="controls">
+          <div class="ctrl"><label for="s3Voff"><span><span class="en">Sensor DC offset</span><span class="zh">传感器直流偏置</span></span><output id="s3VoffOut">1.0%</output></label><input type="range" id="s3Voff" min="0" max="3" step="0.1" value="1"></div>
+        </div>
+        <div class="seg" id="s3Show" style="margin-bottom:10px">
+          <button data-v="ideal"><span class="en">Pure integrator</span><span class="zh">纯积分器</span></button>
+          <button data-v="conv" class="on"><span class="en">DC-blocking (conventional)</span><span class="zh">隔直积分（传统）</span></button>
+          <button data-v="prop" class="on"><span class="en">Mode-switching (proposed)</span><span class="zh">模式切换（本文）</span></button>
+        </div>
+        <div class="readouts">
+          <div class="ro" id="s3RoIdeal"><div class="k"><span class="en">Max <span class="math" data-tex="|\hat{\boldsymbol{\psi}}-\boldsymbol{\psi}|">|\hat{\boldsymbol{\psi}}-\boldsymbol{\psi}|</span> · pure integrator</span><span class="zh">最大 <span class="math" data-tex="|\hat{\boldsymbol{\psi}}-\boldsymbol{\psi}|">|\hat{\boldsymbol{\psi}}-\boldsymbol{\psi}|</span> · 纯积分</span></div><div class="v" id="s3PkIdeal">–</div></div>
+          <div class="ro bad"><div class="k"><span class="en">Max <span class="math" data-tex="|\hat{\boldsymbol{\psi}}-\boldsymbol{\psi}|">|\hat{\boldsymbol{\psi}}-\boldsymbol{\psi}|</span> · DC-blocking</span><span class="zh">最大 <span class="math" data-tex="|\hat{\boldsymbol{\psi}}-\boldsymbol{\psi}|">|\hat{\boldsymbol{\psi}}-\boldsymbol{\psi}|</span> · 隔直积分</span></div><div class="v" id="s3PkConv">–</div></div>
+          <div class="ro ok"><div class="k"><span class="en">Max <span class="math" data-tex="|\hat{\boldsymbol{\psi}}-\boldsymbol{\psi}|">|\hat{\boldsymbol{\psi}}-\boldsymbol{\psi}|</span> · proposed</span><span class="zh">最大 <span class="math" data-tex="|\hat{\boldsymbol{\psi}}-\boldsymbol{\psi}|">|\hat{\boldsymbol{\psi}}-\boldsymbol{\psi}|</span> · 本文</span></div><div class="v" id="s3PkProp">–</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="transport" style="position:static;box-shadow:none;margin-bottom:10px">
+          <button class="play" id="s3Play"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg><span class="lbl"><span class="en">Play</span><span class="zh">播放</span></span></button>
+          <input type="range" id="s3Scrub" min="0" max="1000" value="1000" aria-label="time">
+          <span class="time" id="s3Time">0.000 s</span>
+          <span class="lamp" id="s3Lamp"><span class="en">Steady mode</span><span class="zh">稳态模式</span></span>
+        </div>
+        <div class="grid-2" style="gap:12px;grid-template-columns:1fr 1.3fr">
+          <div>
+            <div class="panel-title"><span><span class="en">Flux trajectory (αβ)</span><span class="zh">磁链轨迹（αβ）</span></span></div>
+            <div class="legend"><span><i style="border-color:var(--ink-2)"></i><span class="en">true <span class="math" data-tex="\boldsymbol{\psi}_s">\boldsymbol{\psi}_s</span></span><span class="zh">真实 <span class="math" data-tex="\boldsymbol{\psi}_s">\boldsymbol{\psi}_s</span></span></span></div>
+            <canvas id="s3Flux" class="plot square"></canvas>
+          </div>
+          <div>
+            <div class="panel-title"><span><span class="en">Flux estimation error <span class="math" data-tex="|\hat{\boldsymbol{\psi}}-\boldsymbol{\psi}|">|\hat{\boldsymbol{\psi}}-\boldsymbol{\psi}|</span></span><span class="zh">磁链估计误差 <span class="math" data-tex="|\hat{\boldsymbol{\psi}}-\boldsymbol{\psi}|">|\hat{\boldsymbol{\psi}}-\boldsymbol{\psi}|</span></span></span><span class="hint">p.u.</span></div>
+            <div class="legend" id="s3Legend"></div>
+            <div class="plot-wrap"><canvas id="s3ErrPlot" class="plot tall"></canvas></div>
+            <canvas id="s3Volt" class="plot" style="height:64px"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 4. SATURATION ============================== -->
+<section class="chapter" id="saturation">
+  <div class="wrap">
+    <div class="eyebrow"><span class="en">04 · Contribution ③</span><span class="zh">04 · 贡献 ③</span><span class="tag sim"><span class="en">illustrative model</span><span class="zh">示意模型</span></span></div>
+    <h2><span class="en">Saturation compensation with a look-up table</span><span class="zh">基于查表的磁饱和补偿</span></h2>
+    <div class="split">
+      <div>
+        <p>
+          <span class="en">Machines are designed to run near the knee of the magnetising curve. The overcurrent at fault inception pushes the air-gap flux <span class="math" data-tex="\boldsymbol{\psi}_m=\boldsymbol{\psi}_s-L_{\sigma s}\boldsymbol{i}_s">\boldsymbol{\psi}_m=\boldsymbol{\psi}_s-L_{\sigma s}\boldsymbol{i}_s</span> (eq. 13) past the knee, and the mutual inductance <span class="math" data-tex="L_{m}">L_{m}</span> collapses. Online identifiers are far too slow for a transient that is over within milliseconds.</span>
+          <span class="zh">电机通常设计在磁化曲线的膝点附近运行。故障瞬间的过电流把气隙磁链 <span class="math" data-tex="\boldsymbol{\psi}_m=\boldsymbol{\psi}_s-L_{\sigma s}\boldsymbol{i}_s">\boldsymbol{\psi}_m=\boldsymbol{\psi}_s-L_{\sigma s}\boldsymbol{i}_s</span>（式 13）推过膝点，互感 <span class="math" data-tex="L_{m}">L_{m}</span> 随之大幅下降。在线辨识方法的速度远远跟不上这种毫秒级的暂态。</span>
+        </p>
+        <p>
+          <span class="en">The fix is deliberately simple. The <span class="math" data-tex="L_{m}">L_{m}</span>–|<span class="math" data-tex="\boldsymbol{\psi}_{m}">\boldsymbol{\psi}_{m}</span>| relation is characterised once with a no-load test and stored as a table. Since |<span class="math" data-tex="\boldsymbol{\psi}_{m}">\boldsymbol{\psi}_{m}</span>| already comes from the flux observer, <span class="math" data-tex="L_{m}">L_{m}</span> is corrected at every sample at practically no cost. <strong>Drag the operating point</strong> into saturation.</span>
+          <span class="zh">解决方法刻意保持简单：通过一次空载试验标定 <span class="math" data-tex="L_{m}">L_{m}</span>–|<span class="math" data-tex="\boldsymbol{\psi}_{m}">\boldsymbol{\psi}_{m}</span>| 关系并存成表。由于 |<span class="math" data-tex="\boldsymbol{\psi}_{m}">\boldsymbol{\psi}_{m}</span>| 本来就由磁链观测器给出，每个采样周期都能修正 <span class="math" data-tex="L_{m}">L_{m}</span>，几乎不增加计算量。<strong>把工作点拖进饱和区</strong>试试。</span>
+        </p>
+        <div class="controls">
+          <div class="ctrl"><label for="s4Psi"><span><span class="en">Air-gap flux <span class="math" data-tex="|\boldsymbol{\psi}_m|">|\boldsymbol{\psi}_m|</span></span><span class="zh">气隙磁链 <span class="math" data-tex="|\boldsymbol{\psi}_m|">|\boldsymbol{\psi}_m|</span></span></span><output id="s4PsiOut">1.00 p.u.</output></label><input type="range" id="s4Psi" min="0.2" max="1.4" step="0.01" value="1.2"></div>
+          <div class="ctrl"><label for="s4Is"><span><span class="en">Stator current <span class="math" data-tex="|\boldsymbol{i}_s|">|\boldsymbol{i}_s|</span></span><span class="zh">定子电流 <span class="math" data-tex="|\boldsymbol{i}_s|">|\boldsymbol{i}_s|</span></span></span><output id="s4IsOut">1.0 p.u.</output></label><input type="range" id="s4Is" min="0.2" max="2.5" step="0.1" value="1.0"></div>
+          <button class="play" id="s4Surge"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg><span class="en">Simulate a fault surge</span><span class="zh">模拟故障冲击</span></button>
+        </div>
+        <div class="readouts">
+          <div class="ro"><div class="k"><span class="en">Actual <span class="math" data-tex="L_m/L_{m,\mathrm{N}}">L_m/L_{m,\mathrm{N}}</span></span><span class="zh">实际 <span class="math" data-tex="L_m/L_{m,\mathrm{N}}">L_m/L_{m,\mathrm{N}}</span></span></div><div class="v" id="s4Lm">–</div></div>
+          <div class="ro bad"><div class="k"><span class="en">Rotor-current angle error, constant <span class="math" data-tex="L_m">L_m</span></span><span class="zh">转子电流角度误差（<span class="math" data-tex="L_m">L_m</span> 取常数）</span></div><div class="v" id="s4ErrN">–</div></div>
+          <div class="ro ok"><div class="k"><span class="en">… with LUT correction</span><span class="zh">…… 采用 LUT 修正</span></div><div class="v" id="s4ErrL">–</div></div>
+        </div>
+        <p class="note"><span class="en">Curve shape follows Fig. 4 of the paper (typical characteristic, normalised to the rated knee point). Errors are evaluated with eq. (8) using the per-unit parameters of the 5-kW test machine, with the stator current lagging the flux by 80°.</span><span class="zh">曲线形状与论文图 4 一致（典型特性，以额定膝点归一化）。误差按式 (8) 计算，参数取 5 kW 实验电机的标幺值，定子电流滞后磁链 80°。</span></p>
+      </div>
+      <div class="card">
+        <div class="panel-title"><span><span class="en">Magnetising inductance vs. air-gap flux</span><span class="zh">励磁电感与气隙磁链的关系</span></span><span class="hint"><span class="en">drag the dot</span><span class="zh">拖动圆点</span></span></div>
+        <div class="legend"><span><i style="border-color:var(--s1)"></i><span class="en">actual <span class="math" data-tex="L_m(|\boldsymbol{\psi}_m|)">L_m(|\boldsymbol{\psi}_m|)</span></span><span class="zh">实际 <span class="math" data-tex="L_m(|\boldsymbol{\psi}_m|)">L_m(|\boldsymbol{\psi}_m|)</span></span></span><span><i class="dash" style="border-color:var(--s2)"></i><span class="en">constant <span class="math" data-tex="L_{m,\mathrm{N}}">L_{m,\mathrm{N}}</span></span><span class="zh">常数 <span class="math" data-tex="L_{m,\mathrm{N}}">L_{m,\mathrm{N}}</span></span></span><span><i style="border-color:var(--s3);border-top-width:6px;width:6px;border-radius:3px"></i><span class="en">LUT entries</span><span class="zh">LUT 表项</span></span></div>
+        <canvas id="s4Curve" class="plot square" style="aspect-ratio:4/3"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 5. EXPERIMENTS ============================== -->
+<section class="chapter" id="experiments">
+  <div class="wrap">
+    <div class="eyebrow"><span class="en">05 · Validation</span><span class="zh">05 · 实验验证</span><span class="tag real"><span class="en">measured data</span><span class="zh">实测数据</span></span></div>
+    <h2><span class="en">Replay the experiments on the 5-kW rig</span><span class="zh">回放 5 kW 实验平台上的实测波形</span></h2>
+    <p class="lede"><span class="en">The measured records behind the paper’s figures (2 kHz recorder, displayed at 1 kHz) are shown side by side: sensorless control on the left, encoder-based control on the right. Corresponding plots share time and amplitude scales to compare the transient responses directly.</span><span class="zh">下图回放论文中的实测记录（录波 2 kHz，网页显示 1 kHz）。左列为无位置传感器控制，右列为有位置传感器控制；对应波形采用相同的时间轴和纵轴范围，可直接比较两者的动态响应。</span></p>
+
+    <div class="tabs" id="s5Tabs">
+      <button class="tab" data-case="step"><b><span class="en">Power step</span><span class="zh">功率阶跃</span></b><small><span class="en">2 → 3 kW, normal grid</span><span class="zh">2 → 3 kW，电网正常</span></small></button>
+      <button class="tab on" data-case="sym"><b><span class="en">80% symmetric dip</span><span class="zh">80% 对称跌落</span></b><small><span class="en">1 → 0.2 → 0.9 p.u., 500 ms</span><span class="zh">1 → 0.2 → 0.9 p.u.，500 ms</span></small></button>
+      <button class="tab" data-case="asym"><b><span class="en">60% single-phase dip</span><span class="zh">60% 单相跌落</span></b><small><span class="en">asymmetric, 500 ms</span><span class="zh">不对称，500 ms</span></small></button>
+      <button class="tab" data-case="rs"><b><span class="en">80% dip + <span class="math" data-tex="R_s">R_s</span> mismatch</span><span class="zh">80% 跌落 + <span class="math" data-tex="R_s">R_s</span> 失配</span></b><small><span class="math" data-tex="R_s=1.2R_{s\mathrm{N}}">R_s=1.2R_{s\mathrm{N}}</span></small></button>
+    </div>
+
+    <div class="transport">
+      <button class="play" id="s5Play"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg><span class="lbl"><span class="en">Play</span><span class="zh">播放</span></span></button>
+      <input type="range" id="s5Scrub" min="0" max="1999" value="1999" aria-label="time">
+      <span class="time" id="s5Time">0.000 s</span>
+      <select id="s5Speed" aria-label="playback speed"><option value="0.1">0.1×</option><option value="0.25" selected>0.25×</option><option value="0.5">0.5×</option><option value="1">1×</option></select>
+    </div>
+    <div class="readouts" id="s5Info" style="margin:-4px 0 14px"></div>
+    <div class="exp-grid" id="s5Grid"></div>
+    <p class="note" id="s5Note"></p>
+  </div>
+</section>
+
+<!-- ============================== 6. COMPARISON ============================== -->
+<section class="chapter" id="comparison">
+  <div class="wrap">
+    <div class="eyebrow"><span class="en">06 · Comparative study</span><span class="zh">06 · 对比实验</span><span class="tag real"><span class="en">measured data</span><span class="zh">实测数据</span></span></div>
+    <h2><span class="en">Five observers, one fault: who rides through?</span><span class="zh">五种观测器，同一场故障：谁能穿越？</span></h2>
+    <p class="lede"><span class="en">All runs are aligned at the fault instant. When an observer loses the rotor position, the coordinate transformation goes wrong, the stator current surges past the protection threshold and the machine is tripped off the grid.</span><span class="zh">所有记录都按故障发生时刻对齐。观测器一旦丢失转子位置，坐标变换就会出错，定子电流冲过保护阈值，电机随即被保护动作切离电网。</span></p>
+    <div class="transport">
+      <button class="play" id="s6Play"><svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg><span class="lbl"><span class="en">Play</span><span class="zh">播放</span></span></button>
+      <input type="range" id="s6Scrub" min="0" max="1999" value="1999" aria-label="time">
+      <span class="time" id="s6Time">0.000 s</span>
+      <select id="s6Speed" aria-label="playback speed"><option value="0.1">0.1×</option><option value="0.25" selected>0.25×</option><option value="0.5">0.5×</option></select>
+    </div>
+    <div class="lane-head"><span><span class="en">Method · test</span><span class="zh">方法 · 工况</span></span><span><span class="en">Stator phase currents <span class="math" data-tex="i_{s,abc}">i_{s,abc}</span> (A)</span><span class="zh">定子三相电流 <span class="math" data-tex="i_{s,abc}">i_{s,abc}</span> (A)</span></span><span><span class="en">Rotor-angle error <span class="math" data-tex="\Delta\theta_r">\Delta\theta_r</span> (°)</span><span class="zh">转子角度误差 <span class="math" data-tex="\Delta\theta_r">\Delta\theta_r</span> (°)</span></span><span><span class="en">Outcome</span><span class="zh">结果</span></span></div>
+    <div class="race" id="s6Race"></div>
+
+    <h3 style="margin-top:36px"><span class="en">Summary (Table I)</span><span class="zh">结果汇总（表 I）</span></h3>
+    <div class="card tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th><span class="en">Method</span><span class="zh">方法</span></th><th><span class="en">Test condition</span><span class="zh">测试工况</span></th><th><span class="en">Peak <span class="math" data-tex="|\Delta\theta_r|">|\Delta\theta_r|</span> before trip / in fault</span><span class="zh">跳闸前 / 故障中 <span class="math" data-tex="|\Delta\theta_r|">|\Delta\theta_r|</span> 峰值</span></th><th><span class="en">FRT result</span><span class="zh">穿越结果</span></th></tr></thead>
+        <tbody id="s6Table"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== 7. PAPER ============================== -->
+<section class="chapter" id="paper">
+  <div class="wrap">
+    <div class="eyebrow"><span class="en">07 · Platform &amp; paper</span><span class="zh">07 · 平台与论文</span></div>
+    <h2><span class="en">The test platform</span><span class="zh">实验平台</span></h2>
+    <p class="lede"><span class="en">A four-pole 5-kW DFIG is driven by a prime mover that emulates the wind, and a programmable AC source emulates the grid faults. Control runs on an RTU-BOX206 real-time controller (TI TMS320F28377D DSP). The real sensors carry real DC offsets.</span><span class="zh">一台四极 5 kW 双馈电机由原动机拖动以模拟风况，三相可编程交流电源模拟各类电网故障。控制算法运行在 RTU-BOX206 实时控制器（TI TMS320F28377D DSP）上；所用的都是真实传感器，也就带着真实的直流偏置。</span></p>
+    <div class="photos">
+      <figure class="photo" style="margin:0;grid-column:span 2"><img src="assets/machine.jpg" alt="5-kW DFIG coupled to the prime mover" loading="lazy"><figcaption><span class="en">5-kW DFIG (left) · encoder (for benchmarking only) · prime mover (right)</span><span class="zh">5 kW 双馈电机（左）· 编码器（仅用于对比）· 原动机（右）</span></figcaption></figure>
+      <figure class="photo tallp" style="margin:0"><img src="assets/cabinet.jpg" alt="Integrated converter and controller cabinet" loading="lazy"><figcaption><span class="en">Integrated cabinet: back-to-back VSC + controller</span><span class="zh">一体化机柜：背靠背变流器 + 控制器</span></figcaption></figure>
+      <figure class="photo" style="margin:0"><img src="assets/source.jpg" alt="Programmable voltage source" loading="lazy"><figcaption><span class="en">Programmable AC source (grid-fault emulator)</span><span class="zh">可编程交流电源（电网故障模拟）</span></figcaption></figure>
+      <figure class="photo" style="margin:0"><img src="assets/host.jpg" alt="Host computer" loading="lazy"><figcaption><span class="en">Host computer</span><span class="zh">上位机</span></figcaption></figure>
+    </div>
+
+    <div class="grid-2 mt" style="margin-top:28px;align-items:start">
+      <div class="card tbl-wrap">
+        <h3><span class="en">Machine parameters (Table II)</span><span class="zh">电机参数（表 II）</span></h3>
+        <table class="tbl">
+          <tbody>
+            <tr><td><span class="en">Rated power</span><span class="zh">额定功率</span></td><td class="num">5 kW</td></tr>
+            <tr><td><span class="en">Rated stator voltage / current</span><span class="zh">额定定子电压 / 电流</span></td><td class="num">400 V / 6.1 A</td></tr>
+            <tr><td><span class="en">Rated rotor current</span><span class="zh">额定转子电流</span></td><td class="num">2.96 A</td></tr>
+            <tr><td><span class="en">Rated speed / frequency</span><span class="zh">额定转速 / 频率</span></td><td class="num">1800 rpm / 50 Hz</td></tr>
+            <tr><td><span class="math" data-tex="R_s">R_s</span> / <span class="math" data-tex="R_r">R_r</span></td><td class="num">1.726 Ω / 2.020 Ω</td></tr>
+            <tr><td><span class="math" data-tex="L_{\sigma s}">L_{\sigma s}</span> / <span class="math" data-tex="L_{\sigma r}">L_{\sigma r}</span></td><td class="num">3.76 mH / 4.85 mH</td></tr>
+            <tr><td><span class="math" data-tex="L_m">L_m</span></td><td class="num">186.4 mH</td></tr>
+            <tr><td><span class="en">Pole pairs</span><span class="zh">极对数</span></td><td class="num">2</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="card">
+          <h3><span class="en">Read &amp; cite</span><span class="zh">阅读与引用</span></h3>
+          <p style="margin-bottom:6px"><strong>W. Zeng, T. Wang, Y. Wang, H. Wu, X. Meng, C. Zhao, Z. Zhang, and L. Wu</strong>, “Sensorless Control of Doubly-Fed Induction Generators with Grid Fault Ride-Through Capability,” <em>IEEE Transactions on Energy Conversion</em>, 2026.</p>
+          <p>DOI: <a href="https://doi.org/10.1109/TEC.2026.3738362" target="_blank" rel="noopener">10.1109/TEC.2026.3738362</a> <span class="chip" style="margin-left:6px"><span class="en">Early Access</span><span class="zh">在线优先出版</span></span></p>
+          <div class="cite">
+<pre id="bib">@article{Zeng2026Sensorless,
+  title   = {Sensorless Control of Doubly-Fed Induction Generators
+             with Grid Fault Ride-Through Capability},
+  author  = {Zeng, Wenbo and Wang, Tao and Wang, Yuhao and Wu, Han and
+             Meng, Xiang and Zhao, Chen and Zhang, Zhenxiao and Wu, Lijian},
+  journal = {IEEE Transactions on Energy Conversion},
+  year    = {2026},
+  doi     = {10.1109/TEC.2026.3738362}
+}</pre>
+            <button class="btn" id="copyBib"><span class="en">Copy</span><span class="zh">复制</span></button>
+          </div>
+        </div>
+        <div class="callout" style="margin-top:16px">
+          <span class="en"><strong>Take-away.</strong> An RCMO with an arctangent error function, a mode-switching flux observer and a LUT for <span class="math" data-tex="L_{m}">L_{m}</span> — three simple, implementable changes — are enough to let a sensorless DFIG ride through grid-code-level faults on real hardware.</span>
+          <span class="zh"><strong>一句话总结：</strong>反正切误差函数的 RCMO、模式切换磁链观测器、<span class="math" data-tex="L_{m}">L_{m}</span> 查表修正——三个简单、易实现的改进，就足以让无传感器 DFIG 在真实硬件上穿越电网规范级别的故障。</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="en">Sections 01–04 use simplified, per-unit models built from the paper's equations to illustrate each idea. Sections 05–06 replay the measured experimental records. © 2026 the authors.</span>
+    <span class="zh">第 01–04 节使用基于论文公式的简化标幺模型来示意各项思路；第 05–06 节回放的是实测实验记录。© 2026 作者所有。</span>
+  </div>
+</footer>
+
+<script src="assets/katex/katex.min.js"></script>
+<script src="js/math.js"></script>
+<script src="data.js"></script>
+<script src="js/models.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
