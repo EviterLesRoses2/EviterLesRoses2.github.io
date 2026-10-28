@@ -606,7 +606,7 @@
     const META = {
       ideal: { c: 's4', en: 'pure integrator', zh: '纯积分器' },
       conv: { c: 's2', en: 'DC-blocking', zh: '隔直积分' },
-      prop: { c: 's1', en: 'mode-switching (proposed)', zh: '模式切换（本文）' },
+      prop: { c: 's7', en: 'mode-switching (proposed)', zh: '模式切换（本文）' },
     };
     const DEC = 10; // 10 kHz sim -> 1 kHz display
     let sim, ds, ep;
@@ -655,7 +655,7 @@
       tail(ds.ta, ds.tb, C['ink-2'], 3.5);
       if (show.ideal) tail(ds.ia, ds.ib, C.s4, 1.6);
       if (show.conv) tail(ds.ca, ds.cb, C.s2, 1.6);
-      if (show.prop) tail(ds.pa, ds.pb, C.s1, 1.6);
+      if (show.prop) tail(ds.pa, ds.pb, C[META.prop.c], 1.6);
       ctx.restore();
     }
     function drawVolt(i) {
