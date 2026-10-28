@@ -28,7 +28,7 @@
   function readColors() {
     const cs = getComputedStyle(root);
     ['ink', 'ink-2', 'muted', 'grid', 'axis', 'surface', 'surface-2', 's1', 's2', 's3', 's4', 's5', 's7',
-      'critical', 'good', 'fault-band', 'accent'].forEach((k) => { C[k] = cs.getPropertyValue('--' + k).trim(); });
+      'critical', 'good', 'fault-band', 'accent', 'flux-true'].forEach((k) => { C[k] = cs.getPropertyValue('--' + k).trim(); });
   }
   const redrawers = [];
   const onRedraw = (fn) => { redrawers.push(fn); return fn; };
@@ -652,7 +652,7 @@
         polyline(ctx, (j) => xa[j], ya, F.X, F.Y, from, i);
         ctx.fillStyle = c; ctx.beginPath(); ctx.arc(F.X(xa[i]), F.Y(ya[i]), 4, 0, 7); ctx.fill();
       };
-      tail(ds.ta, ds.tb, C['ink-2'], 3.5);
+      tail(ds.ta, ds.tb, C['flux-true'], 3.5);
       if (show.ideal) tail(ds.ia, ds.ib, C.s4, 1.6);
       if (show.conv) tail(ds.ca, ds.cb, C.s2, 1.6);
       if (show.prop) tail(ds.pa, ds.pb, C[META.prop.c], 1.6);
