@@ -971,7 +971,7 @@
         const { d } = ln;
         let cls = 'chip', txt;
         if (i < d.fault) txt = tr('● Normal operation', '● 正常运行');
-        else if (d.trip != null && i >= d.trip) { cls += ' bad'; txt = '✕ ' + tr('Grid disconnected', '脱网') + ` (+${Math.round((d.trip - d.fault) * 1000 / EXP.fs)} ms)`; }
+        else if (d.trip != null && i >= d.trip) { cls += ' bad'; txt = '✕ ' + tr('Grid disconnected', '脱网'); }
         else if (i < d.fault + 650) { cls += ' warn'; txt = '▲ ' + tr('Riding through…', '穿越中…'); }
         else { cls += ' ok'; txt = '✓ ' + tr('FRT success', '穿越成功'); }
         ln.chip.className = cls; ln.chip.textContent = txt;
