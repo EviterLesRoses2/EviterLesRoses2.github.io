@@ -3,6 +3,12 @@ title = "Honors & Awards"
 description = "Selected scholarships, distinctions, and competition awards."
 
 [[items]]
+title = "Wang Guosong Scholarship"
+subtitle = "College of Electrical Engineering, Zhejiang University"
+date = "2026"
+content = "The highest honor of the College of Electrical Engineering at Zhejiang University."
+
+[[items]]
 title = "National Scholarship of China"
 subtitle = "Ministry of Education of China"
 date = "2026, 2025 & 2024"

@@ -237,7 +237,7 @@ export default function PublicationsList({ config, publications, embedded = fals
                                     {(pub.statusLabel || pub.authorRole || pub.quartile || pub.impactFactor) && (
                                         <div className="flex flex-wrap gap-2 mb-4">
                                             {pub.statusLabel && (
-                                                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${pub.status === 'accepted'
+                                                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${pub.status === 'accepted' || pub.status === 'published'
                                                     ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300'
                                                     : 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300'
                                                     }`}>

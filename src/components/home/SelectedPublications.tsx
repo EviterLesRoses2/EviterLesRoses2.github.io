@@ -62,7 +62,7 @@ export default function SelectedPublications({ publications, title, enableOnePag
                                 {pub.journal || pub.conference}
                             </p>
                             {pub.statusLabel && (
-                                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${pub.status === 'accepted'
+                                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold ${pub.status === 'accepted' || pub.status === 'published'
                                     ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300'
                                     : 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300'
                                     }`}>
